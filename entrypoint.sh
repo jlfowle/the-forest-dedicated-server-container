@@ -58,7 +58,7 @@ allowBuildingDestruction ${ALLOW_BUILDING_DESTRUCTION-"on"}
 // Allow enemies in creative games. Must be set to "on" or "off"
 allowEnemiesCreativeMode ${ALLOW_ENEMIES_CREATIVE_MODE-"off"}
 // Allow clients to use the built in development console. Must be set to "on" or "off"
-allowCheat ${ALLOW_CHEAT-"off"}
+allowCheats ${ALLOW_CHEAT-"off"}
 // Allows defining a custom folder for save slots, leave empty to use the default location
 saveFolderPath ${SAVE_FOLDER_PATH-"${APPDATA}"}
 // Target FPS when no client is connected
