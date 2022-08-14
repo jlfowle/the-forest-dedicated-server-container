@@ -3,11 +3,13 @@
 set -eu
 umask 004
 
-mkdir /opt/app-root/winedata/WINE64
-pushd /opt/app-root/winedata
+echo "Configuring wine"
+mkdir /opt/app-root/winedata/WINE64 >/dev/null
+pushd /opt/app-root/winedata >/dev/null
 winecfg >/dev/null 2&>1
-popd
+popd >/dev/null
 
+echo "Generating server config (${GAMEDIR}/config.cfg)"
 cat >${GAMEDIR}/config.cfg <<EOF
 // Dedicated Server Settings.
 // Server IP address - Note: If you have a router, this address is the internal address, and you need to configure ports forwarding, append the current game port here as well
@@ -64,4 +66,7 @@ targetFpsIdle ${TARGET_FPS_IDLE-5}
 targetFpsActive ${TARGET_FPS_ACTIVE-60}
 EOF
 
-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine ${GAMEDIR}/TheForestDedicatedServer.exe -batchmode -savefolderpath "${APPDATA}" -configfilepath "${GAMEDIR}/config.cfg"
+grep -v '^//' ${GAMEDIR}/config.cfg
+
+echo "Starting server via xvfb-run, wine, and ${GAMEDIR}/TheForestDedicatedServer.exe"
+exec xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine ${GAMEDIR}/TheForestDedicatedServer.exe -batchmode -savefolderpath "${APPDATA}" -configfilepath "${GAMEDIR}/config.cfg"

@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
   HOME=/opt/app-root \
   WINEPREFIX=/opt/app-root/winedata/WINE64 \
   WINEARCH=win64 \
-  DISPLAY=:1.0 \
+  DISPLAY=:0 \
   APPDATA=/data \
   GAMEDIR=/opt/app-root/game
 
