@@ -29,5 +29,7 @@ RUN umask 004 && \
   steamcmd +@sSteamCmdForcePlatformType windows +login anonymous +force_install_dir $GAMEDIR +app_update 556450 validate +quit
 
 WORKDIR /opt/app-root
+VOLUME ["$APPDATA"]
+EXPOSE 8766/udp 27015/udp 27016/udp
 
 ENTRYPOINT [ "/entrypoint.sh" ]

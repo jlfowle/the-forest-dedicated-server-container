@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: the-forest-dedicated-server
+  labels:
+    app: the-forest-dedicated-server
+    app.kubernetes.io/component: the-forest-dedicated-server
+    app.kubernetes.io/instance: the-forest-dedicated-server
+    app.kubernetes.io/name: the-forest-dedicated-server
+    app.kubernetes.io/part-of: the-forest-dedicated-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: the-forest-dedicated-server
+  template:
+    metadata:
+      labels:
+        app: the-forest-dedicated-server
+    spec:
+      containers:
+        - name: the-forest-dedicated-server
+          image: ghcr.io/jlfowle/the-forest-dedicated-server-container:latest
+          ports:
+            - containerPort: 8766
+              protocol: UDP
+              name: steam
+            - containerPort: 27015
+              protocol: UDP
+              name: game
+            - containerPort: 27016
+              protocol: UDP
+              name: query
+          env:
+            - name: SERVER_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+  strategy:
+    type: Recreate
