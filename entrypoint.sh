@@ -13,7 +13,7 @@ echo "Generating server config (${GAMEDIR}/config.cfg)"
 cat >${GAMEDIR}/config.cfg <<EOF
 // Dedicated Server Settings.
 // Server IP address - Note: If you have a router, this address is the internal address, and you need to configure ports forwarding, append the current game port here as well
-serverIP ${SERVER_IP}:${GAME_PORT-27015}
+serverIP ${SERVER_IP}
 // Steam Communication Port - Note: If you have a router you will need to open this port.
 serverSteamPort ${STEAM_PORT-8766}
 // Game Communication Port - Note: If you have a router you will need to open this port.
@@ -65,8 +65,6 @@ targetFpsIdle ${TARGET_FPS_IDLE-5}
 // Target FPS when there is at least one client connected
 targetFpsActive ${TARGET_FPS_ACTIVE-60}
 EOF
-
-grep -v '^//' ${GAMEDIR}/config.cfg
 
 echo "Starting server via xvfb-run, wine, and ${GAMEDIR}/TheForestDedicatedServer.exe"
 exec xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine ${GAMEDIR}/TheForestDedicatedServer.exe -batchmode -savefolderpath "${APPDATA}" -configfilepath "${GAMEDIR}/config.cfg"

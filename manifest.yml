@@ -36,7 +36,14 @@ spec:
               valueFrom:
                 fieldRef:
                   apiVersion: v1
-                  fieldPath: metadata.name
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: the-forest-dedicated-server
+                optional: true
+            - secretRef:
+                name: the-forest-dedicated-server
+                optional: true
           resources:
             requests:
               cpu: 900m
