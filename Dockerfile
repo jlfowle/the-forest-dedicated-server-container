@@ -23,9 +23,7 @@ USER 1001
 COPY entrypoint.sh /entrypoint.sh
 
 RUN umask 004 && \
-  mkdir -p /opt/app-root/winedata/WINE64 && \
-  cd /opt/app-root/winedata && \
-  winecfg && \
+  mkdir -p /opt/app-root/winedata && \
   steamcmd +@sSteamCmdForcePlatformType windows +login anonymous +force_install_dir $GAMEDIR +app_update 556450 validate +quit
 
 WORKDIR /opt/app-root

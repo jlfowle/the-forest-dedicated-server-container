@@ -3,6 +3,11 @@
 set -eu
 umask 004
 
+mkdir /opt/app-root/winedata/WINE64
+pushd /opt/app-root/winedata
+winecfg >/dev/null 2&>1
+popd
+
 cat >${GAMEDIR}/config.cfg <<EOF
 // Dedicated Server Settings.
 // Server IP address - Note: If you have a router, this address is the internal address, and you need to configure ports forwarding, append the current game port here as well
