@@ -4,10 +4,11 @@ set -eu
 umask 004
 
 echo "Configuring wine"
-mkdir /opt/app-root/winedata/WINE64 >/dev/null
+mkdir -p /opt/app-root/winedata/WINE64 >/dev/null
 pushd /opt/app-root/winedata >/dev/null
-winecfg >/dev/null 2&>1
+winecfg >/dev/null 2>&1
 popd >/dev/null
+sleep 15
 
 echo "Generating server config (${GAMEDIR}/config.cfg)"
 cat >${GAMEDIR}/config.cfg <<EOF
@@ -67,4 +68,21 @@ targetFpsActive ${TARGET_FPS_ACTIVE-60}
 EOF
 
 echo "Starting server via xvfb-run, wine, and ${GAMEDIR}/TheForestDedicatedServer.exe"
-exec xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine ${GAMEDIR}/TheForestDedicatedServer.exe -batchmode -savefolderpath "${APPDATA}" -configfilepath "${GAMEDIR}/config.cfg"
+xvfb-run --server-num 1 --auto-servernum --server-args='-screen 0 640x480x24:32' wine64 ${GAMEDIR}/TheForestDedicatedServer.exe -savefolderpath "${APPDATA}" -configfilepath "${GAMEDIR}/config.cfg" $@ &
+BPID=$!
+
+function _int() {
+   echo "Stopping container."
+   echo "SIGINT received, shutting down server!"
+   kill -9 ${BPID}
+   wait ${BPID}
+   exit 0
+}
+
+# Set SIGINT handler
+trap _int SIGINT
+
+# Set SIGTERM handler
+trap _int SIGTERM
+
+wait ${BPID}

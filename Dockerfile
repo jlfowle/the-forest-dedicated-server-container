@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
   HOME=/opt/app-root \
   WINEPREFIX=/opt/app-root/winedata/WINE64 \
   WINEARCH=win64 \
-  DISPLAY=:0 \
+  DISPLAY=:1.0 \
   APPDATA=/data \
   GAMEDIR=/opt/app-root/game
 
@@ -20,14 +20,14 @@ RUN apt-get update && \
 
 USER 1001
 
-COPY entrypoint.sh /entrypoint.sh
-
 RUN umask 004 && \
-  mkdir -p /opt/app-root/winedata && \
   steamcmd +@sSteamCmdForcePlatformType windows +login anonymous +force_install_dir $GAMEDIR +app_update 556450 validate +quit
+
+COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /opt/app-root
 VOLUME ["$APPDATA"]
 EXPOSE 8766/udp 27015/udp 27016/udp
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+CMD ["-batchmode","-dedicated"]
