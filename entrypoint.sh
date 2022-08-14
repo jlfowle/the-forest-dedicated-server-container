@@ -74,7 +74,7 @@ BPID=$!
 function _int() {
    echo "Stopping container."
    echo "SIGINT received, shutting down server!"
-   kill -9 ${BPID}
+   kill ${BPID}
    wait ${BPID}
    exit 0
 }
